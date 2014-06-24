@@ -1,5 +1,8 @@
 package com.scubedsoft.androidrhinojs;
 
+import org.mozilla.javascript.Context;
+import org.mozilla.javascript.ScriptableObject;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
@@ -12,6 +15,8 @@ public class MainActivity extends Activity
     private EditText mTextInput;
     private TextView mTextOutput;
     private Button mSubmitButton;
+    private Context mJsContext;
+    private ScriptableObject mScope;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -28,8 +33,19 @@ public class MainActivity extends Activity
     }
 
     public void executeJs(View v) {
-        mTextOutput.setText(String.format("%s%s\n",
-                mTextOutput.getText(), mTextInput.getText()));
+        String cmd = mTextInput.getText().toString();
+        mTextOutput.setText(String.format("%s%s\n", mTextOutput.getText(), cmd));
         mTextInput.setText(null);
+
+        try {
+            mJsContext = Context.enter();
+            mJsContext.setOptimizationLevel(-1);
+            mScope = mJsContext.initStandardObjects(mScope, false);
+
+            Object result = mJsContext.evaluateString(mScope, cmd, "MainActivity.java", 45, null);
+            mTextOutput.setText(String.format("%s%s\n", mTextOutput.getText(), result.toString()));
+        } finally {
+            Context.exit();
+        }
     }
 }
