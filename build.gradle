@@ -9,6 +9,14 @@ buildscript {
 }
 apply plugin: 'android'
 
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.mozilla:rhino:1.7R4'
+}
+
 android {
     compileSdkVersion 19
     buildToolsVersion '19.1.0'
