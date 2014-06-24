@@ -46,6 +46,7 @@ public class MainActivity extends Activity
 
         try {
             // Create and enter a JavaScript Context
+            // Note that this is an instance of org.mozilla.javascript.Context NOT android.content.Context
             mJsContext = Context.enter();
 
             // Disable optimizations. This is necessary or else we get this exception:
